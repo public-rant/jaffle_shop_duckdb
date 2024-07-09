@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: my_python_model
+
+    # Document within the same codebase
+    description: My transformation written in Python
+
+    # Configure in ways that feel intuitive and familiar
+    config:
+      materialized: table
+      tags: ['python']
+
+    # Test the results of my Python transformation
+    columns:
+      - name: customer_id
+        # Standard validation for 'grain' of Python results
+        tests:
+          - unique
+          - not_null
+          - dbt_expectations.expect_column_to_exist
+
+    tests:
+      - dbt_utils.equal_rowcount:
+          compare_model: ref('raw_customers') 
